@@ -1,4 +1,4 @@
-This is a modified version for supporing GLX enabled run-time. Please read the [README-glx.md](README-glx.md) for more information.
+Thanks to the great work of VPL. This is a modified version for supporing GLX enabled run-time. Please read the [README-glx.md](README-glx.md) for more specific information.
 
 # VPL-JAIL-SYSTEM 
 
