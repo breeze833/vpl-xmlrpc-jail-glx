@@ -1,3 +1,5 @@
+This is a modified version for supporing GLX enabled run-time. Please read the [README-glx.md](README-glx.md) for more information.
+
 # VPL-JAIL-SYSTEM 
 
 ![VPL Logo](https://vpl.dis.ulpgc.es/images/logo2.png)

@@ -1,9 +1,4 @@
 #!/bin/bash
-if [ -f $HOME/.glx_required -a -n `which Xephyr` ]; then
-	exec /usr/sbin/vpl/vpl_glx_launcher.sh
-elif [ -f $HOME/.xpra_required -a -n `which xpra` ]; then
-	exec /usr/sbin/vpl/vpl_xpra_launcher.sh
-fi
 {
 	. vpl_environment.sh
 	export LC_ALL=$VPL_LANG 2> .vpl_set_locale_error
@@ -47,7 +42,14 @@ else
 fi
 #set execution mode
 chmod +x $HOME/vpl_wexecution
-$HOME/vpl_wexecution &> .std_output
+VNCDISPLAY=$(ls $HOME/.vnc/*.log | sed -e "s/[^:]*://" -e "s/\.log$//")
+XEPHYRDISP=$(($VNCDISPLAY+25000))
+Xephyr :$XEPHYRDISP -fullscreen &
+while true; do
+  DISPLAY=:$XEPHYRDISP xdpyinfo >& /dev/null
+  [ "$?" == "0" ] && break
+done
+DISPLAY=:$XEPHYRDISP $HOME/vpl_wexecution &> .std_output
 if [ -s .std_output ] ; then
 	if [ "$(command -v xterm)" != "" ] ; then
 		xterm -T "std output" -bg white -fg red -e less .std_output

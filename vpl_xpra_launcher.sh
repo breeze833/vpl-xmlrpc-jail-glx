@@ -1,9 +1,4 @@
 #!/bin/bash
-if [ -f $HOME/.glx_required -a -n `which Xephyr` ]; then
-	exec /usr/sbin/vpl/vpl_glx_launcher.sh
-elif [ -f $HOME/.xpra_required -a -n `which xpra` ]; then
-	exec /usr/sbin/vpl/vpl_xpra_launcher.sh
-fi
 {
 	. vpl_environment.sh
 	export LC_ALL=$VPL_LANG 2> .vpl_set_locale_error
@@ -27,10 +22,10 @@ fi
 #!/bin/bash
 export TERM=xterm
 unset SESSION_MANAGER
-xrdb
+#xrdb
 xsetroot -solid MidnightBlue 
 #activate clipboard
-[ -x vncconfig ] && vncconfig -iconic 2>/dev/null &
+#[ -x vncconfig ] && vncconfig -iconic 2>/dev/null &
 #start window manager
 if [ -x "$(command -v icewm)" ] ; then
 	mkdir .icewm
@@ -57,8 +52,8 @@ if [ -s .std_output ] ; then
 		fi
 	fi
 fi
-VNCDISPLAY=$(ls $HOME/.vnc/*.log | sed -e "s/[^:]*://" -e "s/\.log$//")
-vncserver -kill :$VNCDISPLAY
+VNCDISPLAY=`grep "Actual display used" $HOME/.xpra_start.log | awk '{print $4}'`
+xpra stop $VNCDISPLAY
 END_OF_FILE
 	if [ "$VPL_XGEOMETRY" == "" ] ; then
 		VPL_XGEOMETRY="800x600"
@@ -69,8 +64,8 @@ END_OF_FILE
 		lsof -i :$VNCPORT
 		[ "$?" != "0" ] && break
 	done
-	export DISPLAY=:$VNCPORT.0
-	nohup vncserver :$VNCPORT -rfbport $VNCPORT -localhost -geometry $VPL_XGEOMETRY -nevershared -name vpl
+	xpra start-desktop --bind-rfb=localhost:$VNCPORT --auth=file:filename=$HOME/.vnc/passwd --resize-display=$VPL_XGEOMETRY --start="bash -c $HOME/.vnc/xstartup" >& $HOME/.xpra_start.log
+	export DISPLAY=`grep "Actual display used" $HOME/.xpra/star.log | awk '{print $4}'`
 } &>/dev/null
 echo $VNCPORT
 
