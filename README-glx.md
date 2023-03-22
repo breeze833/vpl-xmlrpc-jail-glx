@@ -9,6 +9,7 @@ I don't want to change the original code too much. The reason is that my solutio
 Therefore, in addition to the installation procedure of the original VPL. Additional manual steps are reuired:
 
 * make sure that the scripts `vpl_{glx,xpra,vnc}*.sh` are copied to `/usr/sbin/vpl/`
+* make sure that Xephyr and/or Xpra are insatlled
 
 The files are added/modified to support the GLX run-time environment. Of course, the resource consumption would be higher than the regular graphical run-time is.
 
